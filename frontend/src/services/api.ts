@@ -3,7 +3,7 @@ import { auth } from "../firebase";
 
 
 const api = axios.create({
-  baseURL: "https://dual-analyte-api.onrender.com",
+  baseURL: "https://dual-analyte-platform.onrender.com",
 });
 
 
