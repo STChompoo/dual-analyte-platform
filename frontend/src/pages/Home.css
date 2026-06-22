@@ -1,0 +1,29 @@
+.home{
+
+max-width:900px;
+
+margin:40px auto;
+
+text-align:center;
+
+}
+
+
+.home h1{
+
+color:#2563eb;
+
+font-size:40px;
+
+}
+
+
+.home p{
+
+margin:15px;
+
+font-size:18px;
+
+color:#64748b;
+
+}

@@ -1,0 +1,175 @@
+.login-page {
+
+  height: 100vh;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  background: linear-gradient(
+    135deg,
+    #dbeafe,
+    #f8fafc
+  );
+}
+
+
+.login-card {
+
+  width: 380px;
+
+  background: white;
+
+  padding: 40px;
+
+  border-radius: 24px;
+
+  box-shadow:
+    0 15px 35px rgba(0,0,0,0.12);
+
+  text-align: center;
+}
+
+
+.logo {
+
+  font-size: 50px;
+
+  margin-bottom: 10px;
+}
+
+
+.login-card h2 {
+
+  color: #2563eb;
+
+  margin-bottom: 8px;
+}
+
+
+.subtitle {
+
+  color: #64748b;
+
+  margin-bottom: 30px;
+
+  font-size: 14px;
+}
+
+
+.login-card input {
+
+  width: 100%;
+
+  padding: 14px;
+
+  margin-bottom: 16px;
+
+  border-radius: 12px;
+
+  border: 1px solid #cbd5e1;
+
+  font-size: 15px;
+}
+
+
+.login-card input:focus {
+
+  outline: none;
+
+  border-color: #2563eb;
+
+  box-shadow: 0 0 0 3px #bfdbfe;
+}
+
+
+.login-card button {
+
+  width: 100%;
+
+  padding: 14px;
+
+  border: none;
+
+  border-radius: 12px;
+
+  background: #2563eb;
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+
+.login-card button:hover {
+
+  background: #1d4ed8;
+}
+
+
+.register-text {
+
+  margin-top: 20px;
+
+  color: #64748b;
+
+  font-size: 14px;
+}
+
+
+.register-text a {
+
+  color: #2563eb;
+
+  text-decoration: none;
+
+  font-weight: bold;
+
+  margin-left: 6px;
+}
+
+
+.register-text a:hover {
+
+  text-decoration: underline;
+}
+
+.google-btn {
+
+  width: 100%;
+
+  margin-top: 12px;
+
+  padding: 14px;
+
+  border-radius: 16px;
+
+  border: 1px solid #e2e8f0;
+
+  background: white;
+
+  color: #334155;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+
+}
+
+.google-btn:hover {
+
+  background: #f8fafc;
+
+  transform: translateY(-2px);
+
+}
