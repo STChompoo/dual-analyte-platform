@@ -13,6 +13,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
+      "https://dual-analyte-platform-dn4r.vercel.app",
     ],
     credentials: true,
   })
