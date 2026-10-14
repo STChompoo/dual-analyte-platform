@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
 import {
   signInWithEmailAndPassword,
-  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
 } from "firebase/auth";
 
 import {
@@ -16,105 +18,88 @@ import {
 
 import "./Login.css";
 
-
 export default function Login() {
-
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // Check Google Login result after redirect
+  useEffect(() => {
+    const checkRedirect = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+
+        if (result) {
+          navigate("/", { replace: true });
+        }
+      } catch (error: any) {
+        alert(error.message);
+      }
+    };
+
+    checkRedirect();
+  }, [navigate]);
 
   // Email & Password Login
   const login = async () => {
-
     try {
-
       await signInWithEmailAndPassword(
         auth,
         email,
         password
       );
 
-      // ไปหน้า Analyzer
-      navigate("/");
-
+      navigate("/", { replace: true });
     } catch (error: any) {
-
       alert(error.message);
-
     }
-
   };
 
-
-  // Google Login
+  // Google Login using Redirect
   const loginGoogle = async () => {
-
     try {
-
-      await signInWithPopup(
+      await signInWithRedirect(
         auth,
         googleProvider
       );
-
-      // ไปหน้า Analyzer
-      navigate("/");
-
     } catch (error: any) {
-
       alert(error.message);
-
     }
-
   };
 
-
   return (
-
     <div className="login-page">
-
       <div className="login-card">
-
         <h1 className="logo">
           🧬
         </h1>
-
 
         <h2>
           Dual-Analyte ePAD
         </h2>
 
-
         <p className="subtitle">
-          Vitamin B12 & Folate Analysis Platform
+          Vitamin B12 &amp; Folate Analysis Platform
         </p>
-
 
         <input
           type="email"
           placeholder="Email"
           value={email}
-          onChange={(e) =>
-            setEmail(e.target.value)
-          }
+          onChange={(e) => setEmail(e.target.value)}
         />
-
 
         <input
           type="password"
           placeholder="Password"
           value={password}
-          onChange={(e) =>
-            setPassword(e.target.value)
-          }
+          onChange={(e) => setPassword(e.target.value)}
         />
-
 
         <button onClick={login}>
           Sign In
         </button>
-
 
         <button
           className="google-btn"
@@ -123,24 +108,13 @@ export default function Login() {
           Continue with Google
         </button>
 
-
         <p className="register-text">
-
-          Don't have an account?
-
-          {" "}
-
+          Don't have an account?{" "}
           <Link to="/register">
             Create one
           </Link>
-
         </p>
-
-
       </div>
-
     </div>
-
   );
-
 }
