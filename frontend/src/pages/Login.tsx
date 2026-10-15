@@ -4,6 +4,7 @@ import { useState } from "react";
 import {
   signInWithEmailAndPassword,
   signInWithPopup,
+  signInAnonymously,
 } from "firebase/auth";
 
 import {
@@ -40,18 +41,38 @@ export default function Login() {
 
       navigate("/", { replace: true });
     } catch (err: unknown) {
-      const code =
-        (err as { code?: string }).code;
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Unable to sign in. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
-      if (code === "auth/invalid-credential") {
-        setError("Incorrect email or password.");
-      } else if (code === "auth/too-many-requests") {
-        setError("Too many attempts. Please try again later.");
+  // Google Login
+  const loginGoogle = async () => {
+    setError("");
+    setLoading(true);
+
+    try {
+      await signInWithPopup(auth, googleProvider);
+      navigate("/", { replace: true });
+    } catch (err: unknown) {
+      const code = (err as { code?: string }).code;
+
+      if (code === "auth/popup-blocked") {
+        setError(
+          "Popup blocked. Please allow pop-ups and try again."
+        );
+      } else if (code === "auth/popup-closed-by-user") {
+        setError("Google sign-in was cancelled.");
       } else {
         setError(
           err instanceof Error
             ? err.message
-            : "Unable to sign in. Please try again."
+            : "Google sign-in failed."
         );
       }
     } finally {
@@ -59,41 +80,27 @@ export default function Login() {
     }
   };
 
-  // Google Login using Popup
-  const loginGoogle = async () => {
+  // Continue as Guest
+  const loginGuest = async () => {
     setError("");
     setLoading(true);
 
     try {
-      const result = await signInWithPopup(
-        auth,
-        googleProvider
-      );
+      await signInAnonymously(auth);
 
-      if (result.user) {
-        navigate("/", { replace: true });
-      }
+      navigate("/", { replace: true });
     } catch (err: unknown) {
-      const code =
-        (err as { code?: string }).code;
+      const code = (err as { code?: string }).code;
 
-      if (code === "auth/popup-blocked") {
+      if (code === "auth/operation-not-allowed") {
         setError(
-          "Google sign-in popup was blocked. Allow pop-ups for this website and try again."
-        );
-      } else if (code === "auth/popup-closed-by-user") {
-        setError(
-          "The Google sign-in window was closed before login completed."
-        );
-      } else if (code === "auth/unauthorized-domain") {
-        setError(
-          "This website is not authorized in Firebase Authentication. Please check Authorized domains."
+          "Guest access is not enabled yet. Please enable Anonymous sign-in in Firebase Console."
         );
       } else {
         setError(
           err instanceof Error
             ? err.message
-            : "Google sign-in failed. Please try again."
+            : "Unable to continue as guest."
         );
       }
     } finally {
@@ -124,7 +131,6 @@ export default function Login() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           autoComplete="email"
-          required
           disabled={loading}
         />
 
@@ -134,7 +140,6 @@ export default function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           autoComplete="current-password"
-          required
           disabled={loading}
         />
 
@@ -143,7 +148,7 @@ export default function Login() {
           onClick={login}
           disabled={loading || !email.trim() || !password}
         >
-          {loading ? "Signing in..." : "Sign In"}
+          {loading ? "Please wait..." : "Sign In"}
         </button>
 
         <button
@@ -152,7 +157,20 @@ export default function Login() {
           onClick={loginGoogle}
           disabled={loading}
         >
-          {loading ? "Please wait..." : "Continue with Google"}
+          Continue with Google
+        </button>
+
+        <div className="guest-divider">
+          <span>OR</span>
+        </div>
+
+        <button
+          type="button"
+          className="guest-btn"
+          onClick={loginGuest}
+          disabled={loading}
+        >
+          {loading ? "Please wait..." : "Continue as Guest"}
         </button>
 
         <p className="register-text">
